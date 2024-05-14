@@ -185,7 +185,7 @@ func (app *App) writer(ctx context.Context, ch chan []byte, wg *sync.WaitGroup) 
 			if err != nil {
 				return
 			}
-			jsonBytes, err := json.MarshalIndent(decoded, "", "  ")
+			jsonBytes, err := json.Marshal(decoded)
 			if err != nil {
 				return
 			}
