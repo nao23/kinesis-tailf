@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/fujiwara/kinesis-tailf/kpl"
+	"github.com/nao23/kinesis-tailf/kpl"
 )
 
 var ar = &kpl.AggregatedRecord{

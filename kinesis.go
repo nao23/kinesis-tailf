@@ -14,7 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
 
-	"github.com/fujiwara/kinesis-tailf/kpl"
+	"github.com/nao23/kinesis-tailf/kpl"
 )
 
 var (

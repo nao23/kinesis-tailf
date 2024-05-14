@@ -11,7 +11,7 @@ import (
 	"github.com/mashiike/didumean"
 	"github.com/tkuchiki/parsetime"
 
-	ktail "github.com/fujiwara/kinesis-tailf"
+	ktail "github.com/nao23/kinesis-tailf"
 )
 
 func main() {
