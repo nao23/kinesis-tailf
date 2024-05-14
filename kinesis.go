@@ -4,17 +4,17 @@ import (
 	"bufio"
 	"context"
 	"crypto/md5"
+	"encoding/json"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
+	"github.com/nao23/kinesis-tailf/kpl"
+	"github.com/vmihailenco/msgpack/v5"
 	"log"
 	"math/big"
 	"os"
 	"sync"
 	"time"
-
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/kinesis"
-	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
-
-	"github.com/nao23/kinesis-tailf/kpl"
 )
 
 var (
@@ -36,10 +36,11 @@ type isOverFunc func(time.Time, ...bool) bool
 //go:generate protoc --go_out=kpl --go_opt=paths=source_relative ./kpl.proto
 
 type App struct {
-	kinesis    *kinesis.Client
-	cfg        aws.Config
-	StreamName string
-	AppendLF   bool
+	kinesis         *kinesis.Client
+	cfg             aws.Config
+	StreamName      string
+	AppendLF        bool
+	DecodeAsMsgPack bool
 }
 
 func New(cfg aws.Config, name string) *App {
@@ -177,7 +178,23 @@ func (app *App) writer(ctx context.Context, ch chan []byte, wg *sync.WaitGroup) 
 			return
 		}
 		mu.Lock()
-		w.Write(b)
+
+		if app.DecodeAsMsgPack {
+			var decoded interface{}
+			err := msgpack.Unmarshal(b, &decoded)
+			if err != nil {
+				return
+			}
+			jsonBytes, err := json.MarshalIndent(decoded, "", "  ")
+			if err != nil {
+				return
+			}
+
+			w.Write(jsonBytes)
+		} else {
+			w.Write(b)
+		}
+
 		if app.AppendLF {
 			w.Write(LF)
 		}

@@ -24,6 +24,8 @@ Required flags are below.
 
 ```
 Usage of kinesis-tailf:
+  -decode-as-msgpack
+    	decode record data as msgpack
   -end string
     	end timestamp
   -lf

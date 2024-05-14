@@ -10,5 +10,6 @@ require (
 	github.com/mashiike/didumean v0.1.3
 	github.com/tkuchiki/go-timezone v0.1.4 // indirect
 	github.com/tkuchiki/parsetime v0.0.0-20160517140325-bece749572a8
+	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	google.golang.org/protobuf v1.33.0
 )

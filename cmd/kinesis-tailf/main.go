@@ -24,7 +24,7 @@ func main() {
 func _main() error {
 	var region, streamName, shardKey, start, end string
 	var startTs, endTs time.Time
-	var appendLF bool
+	var appendLF, decodeAsMsgPack bool
 
 	flag.BoolVar(&appendLF, "lf", false, "append LF(\\n) to each record")
 	flag.StringVar(&streamName, "stream", "", "stream name")
@@ -32,6 +32,7 @@ func _main() error {
 	flag.StringVar(&region, "region", os.Getenv("AWS_REGION"), "region")
 	flag.StringVar(&start, "start", "", "start timestamp")
 	flag.StringVar(&end, "end", "", "end timestamp")
+	flag.BoolVar(&decodeAsMsgPack, "decode-as-msgpack", false, "decode record data as msgpack")
 	didumean.Parse()
 
 	if streamName == "" {
@@ -62,6 +63,7 @@ func _main() error {
 
 	app := ktail.New(awsCfg, streamName)
 	app.AppendLF = appendLF
+	app.DecodeAsMsgPack = decodeAsMsgPack
 	return app.Run(ctx, shardKey, startTs, endTs)
 }
 
